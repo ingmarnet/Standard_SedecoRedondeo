@@ -3,15 +3,15 @@
 /**
  * Standard_SedecoRedondeo
  * Registra el Total Collector de Redondeo SEDECO en el pipeline de totales.
- * Se ejecuta DESPUÉS de tax y discount (sort_order alto).
+ * Se ejecuta al final (después de shipping, tax, etc.) para calcular sobre el monto final.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
     <section name="quote">
         <group name="totals">
-            <!-- Se ejecuta después de tax (sort_order=100) y discount (sort_order=20) -->
-            <item name="sedeco_redondeo" instance="Standard\SedecoRedondeo\Model\Quote\Address\Total\SedecoRounding" sort_order="150"/>
+            <!-- sort_order=990 asegura que corremos después de grand_total (550), tax (450), shipping (350), etc -->
+            <item name="sedeco_redondeo" instance="Standard\SedecoRedondeo\Model\Quote\Address\Total\SedecoRounding" sort_order="990"/>
         </group>
     </section>
 </config>
