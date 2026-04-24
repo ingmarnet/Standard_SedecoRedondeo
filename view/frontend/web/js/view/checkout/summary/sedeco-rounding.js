@@ -46,15 +46,20 @@ define([
 
         /**
          * Retorna el valor del redondeo formateado con la moneda activa.
+         * Forzamos 0 decimales ya que la moneda PYG no los utiliza para este ajuste.
          *
          * @returns {string}
          */
         getValue: function () {
             var segment = this.getSegment();
+            var format = JSON.parse(JSON.stringify(quote.getPriceFormat()));
+            format.precision = 0;
+            format.requiredPrecision = 0;
+
             if (!segment) {
-                return priceUtils.formatPrice(0, quote.getPriceFormat());
+                return priceUtils.formatPrice(0, format);
             }
-            return priceUtils.formatPrice(segment.value, quote.getPriceFormat());
+            return priceUtils.formatPrice(segment.value, format);
         },
 
         /**

@@ -25,6 +25,11 @@ if ((float) $amount === 0.0) {
         <?= $block->escapeHtml(__('Redondeo Resolución SEDECO 1670/22')) ?>
     </th>
     <td class="amount">
-        <span class="price"><?= $block->formatPrice($amount) ?></span>
+        <?php
+        $priceCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $formattedPrice = $priceCurrency->format($amount, false, 0);
+        ?>
+        <span class="price"><?= /* @noEscape */ $formattedPrice ?></span>
     </td>
 </tr>
