@@ -11,8 +11,7 @@
     <body>
         <referenceBlock name="invoice_totals">
             <block class="Standard\SedecoRedondeo\Block\Adminhtml\Sales\Invoice\Totals\SedecoRounding"
-                   name="sedeco_redondeo_new_invoice_totals"
-                   template="Magento_Sales::order/totals/tax.phtml">
+                   name="sedeco_redondeo_new_invoice_totals">
                 <action method="initTotals"/>
             </block>
         </referenceBlock>
