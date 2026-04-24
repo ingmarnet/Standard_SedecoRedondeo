@@ -56,36 +56,45 @@ class SedecoRounding extends AbstractTotal
     ): self {
         parent::collect($quote, $shippingAssignment, $total);
 
-        // Solo calcula en la dirección de envío (evita doble cómputo)
-        $address = $shippingAssignment->getShipping()->getAddress();
-        if ($address->getAddressType() !== Quote\Address::ADDRESS_TYPE_SHIPPING) {
+        $items = $shippingAssignment->getItems();
+        if (!count($items)) {
             return $this;
         }
 
         // Grand Total actual (después de impuestos y descuentos).
-        // getGrandTotal() puede devolver null en un carrito recién creado;
-        // el cast a float convierte null → 0.0 de forma segura.
+        // getGrandTotal() puede devolver null en un carrito recién creado.
         $grandTotal = (float) ($total->getGrandTotal() ?? 0);
 
-        // Calcular el ajuste de redondeo
-        $roundingAmount = $this->calculateRoundingAmount($grandTotal);
-
-        if ($roundingAmount === 0.0) {
-            // No es necesario ajustar
-            $address->setSedecoRoundAmount(0);
-            $quote->setSedecoRoundAmount(0);
+        // Carrito vacío o sin procesar → resetear y salir
+        if ($grandTotal <= 0) {
+            $quote->setSedecoRoundAmount(0.0);
             return $this;
         }
 
-        // Aplicar el ajuste (valor negativo = descuento para el cliente)
+        // Calcular el ajuste SEDECO
+        $roundingAmount = $this->calculateRoundingAmount($grandTotal);
+
+        // Persistir en el Quote para que:
+        //  · fetch() pueda leerlo vía REST API (/rest/V1/.../totals)
+        //  · Los Blocks de admin lo lean al renderizar la orden/invoice
+        $quote->setSedecoRoundAmount($roundingAmount);
+
+        if ($roundingAmount === 0.0) {
+            $total->addTotalAmount($this->getCode(), 0.0);
+            $total->addBaseTotalAmount($this->getCode(), 0.0);
+            return $this;
+        }
+
+        // Aplicar el ajuste negativo al Total object.
+        // addTotalAmount() registra el monto para que el Grand Total
+        // collector nativo (sort_order=200) lo sume al recalcular.
         $total->addTotalAmount($this->getCode(), $roundingAmount);
         $total->addBaseTotalAmount($this->getCode(), $roundingAmount);
+
+        // También actualizar el GrandTotal directamente para que colectores
+        // intermedios (sort_order 151-199) vean el valor ya redondeado.
         $total->setGrandTotal($grandTotal + $roundingAmount);
         $total->setBaseGrandTotal((float) ($total->getBaseGrandTotal() ?? 0) + $roundingAmount);
-
-        // Persistir en Quote Address y Quote
-        $address->setSedecoRoundAmount($roundingAmount);
-        $quote->setSedecoRoundAmount($roundingAmount);
 
         return $this;
     }
@@ -99,7 +108,8 @@ class SedecoRounding extends AbstractTotal
      */
     public function fetch(Quote $quote, Total $total): array
     {
-        $roundingAmount = $quote->getSedecoRoundAmount() ?? 0;
+        $roundingAmount = $total->getTotalAmount($this->getCode()) ?: $quote->getSedecoRoundAmount();
+        $roundingAmount = (float) ($roundingAmount ?? 0);
 
         if ($roundingAmount == 0) {
             return [];
