@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Standard_SedecoRedondeo
+ * Expone sedeco_round_amount como extension attribute en las entidades de ventas,
+ * para que aparezca en la API REST y en los emails/vistas del frontend.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+
+    <!-- Sales Order -->
+    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <attribute code="sedeco_round_amount" type="float"/>
+    </extension_attributes>
+
+    <!-- Sales Invoice -->
+    <extension_attributes for="Magento\Sales\Api\Data\InvoiceInterface">
+        <attribute code="sedeco_round_amount" type="float"/>
+    </extension_attributes>
+
+</config>
