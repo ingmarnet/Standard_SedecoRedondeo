@@ -1,0 +1,30 @@
+<?php
+/**
+ * Standard_SedecoRedondeo
+ * Template: Carrito — Muestra el redondeo SEDECO en el resumen del carrito.
+ *
+ * @var \Magento\Checkout\Block\Cart\Totals $block
+ */
+declare(strict_types=1);
+
+$totals = $block->getTotals();
+
+if (!isset($totals['sedeco_redondeo'])) {
+    return;
+}
+
+$sedecoTotal = $totals['sedeco_redondeo'];
+$amount = $sedecoTotal->getValue();
+
+if ((float) $amount === 0.0) {
+    return;
+}
+?>
+<tr class="totals sedeco-redondeo">
+    <th class="mark" scope="row">
+        <?= $block->escapeHtml(__('Redondeo Resolución SEDECO 1670/22')) ?>
+    </th>
+    <td class="amount">
+        <span class="price"><?= $block->formatPrice($amount) ?></span>
+    </td>
+</tr>

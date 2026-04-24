@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Standard_SedecoRedondeo
+ * Layout: Carrito (Cart Summary)
+ * Agrega el bloque de redondeo SEDECO al resumen del carrito.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="cart.totals.sidebar">
+            <block class="Magento\Checkout\Block\Cart\Totals"
+                   name="sedeco_redondeo_cart_totals"
+                   template="Standard_SedecoRedondeo::cart/sedeco-rounding.phtml"
+                   before="grand_total"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Standard_SedecoRedondeo
+ * Declara el esquema de las columnas que se agregan a las tablas de ventas.
+ * Usar: bin/magento setup:db-schema:upgrade
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+
+    <!-- ==================== QUOTE ADDRESS ==================== -->
+    <table name="quote_address" resource="checkout" comment="Sales Flat Quote Address">
+        <column xsi:type="decimal" name="sedeco_round_amount" scale="4" precision="20"
+                unsigned="false" nullable="true" default="0"
+                comment="SEDECO Rounding Adjustment Amount (Resolución 1670/2022)"/>
+    </table>
+
+    <!-- ==================== QUOTE (para la API de totales) ==================== -->
+    <table name="quote" resource="checkout" comment="Sales Flat Quote">
+        <column xsi:type="decimal" name="sedeco_round_amount" scale="4" precision="20"
+                unsigned="false" nullable="true" default="0"
+                comment="SEDECO Rounding Amount on Quote"/>
+    </table>
+
+    <!-- ==================== SALES ORDER ==================== -->
+    <table name="sales_order" resource="sales" comment="Sales Flat Order">
+        <column xsi:type="decimal" name="sedeco_round_amount" scale="4" precision="20"
+                unsigned="false" nullable="true" default="0"
+                comment="SEDECO Rounding Amount (Resolución 1670/2022)"/>
+    </table>
+
+    <!-- ==================== SALES INVOICE ==================== -->
+    <table name="sales_invoice" resource="sales" comment="Sales Flat Invoice">
+        <column xsi:type="decimal" name="sedeco_round_amount" scale="4" precision="20"
+                unsigned="false" nullable="true" default="0"
+                comment="SEDECO Rounding Amount on Invoice"/>
+    </table>
+
+    <!-- ==================== SALES CREDITMEMO ==================== -->
+    <table name="sales_creditmemo" resource="sales" comment="Sales Flat Creditmemo">
+        <column xsi:type="decimal" name="sedeco_round_amount" scale="4" precision="20"
+                unsigned="false" nullable="true" default="0"
+                comment="SEDECO Rounding Amount on Credit Memo"/>
+    </table>
+
+</schema>

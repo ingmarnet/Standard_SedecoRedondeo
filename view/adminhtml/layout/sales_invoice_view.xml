@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Standard_SedecoRedondeo
+ * Layout: Admin > Sales > Invoices > View
+ * Agrega el bloque de redondeo SEDECO al panel de totales de la factura.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="invoice_totals">
+            <block class="Standard\SedecoRedondeo\Block\Adminhtml\Sales\Invoice\Totals\SedecoRounding"
+                   name="sedeco_redondeo_invoice_totals"
+                   template="Magento_Sales::order/totals/tax.phtml">
+                <action method="initTotals"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

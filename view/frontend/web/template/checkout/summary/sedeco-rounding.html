@@ -1,0 +1,17 @@
+<!--
+/**
+ * Standard_SedecoRedondeo
+ * Template Knockout.js para la línea de Redondeo SEDECO en el checkout summary.
+ * Se renderiza como una fila de totales con estilo negativo (descuento).
+ */
+-->
+<!-- ko if: isDisplayed() -->
+<tr class="totals sedeco-redondeo">
+    <th class="mark" scope="row">
+        <span class="title" data-bind="text: getTitle()"></span>
+    </th>
+    <td class="amount">
+        <span class="price" data-bind="text: getValue()"></span>
+    </td>
+</tr>
+<!-- /ko -->

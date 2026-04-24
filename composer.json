@@ -1,0 +1,29 @@
+{
+    "name": "standard/module-sedeco-redondeo",
+    "description": "Módulo Magento 2: Redondeo obligatorio según Resolución SEDECO N° 1670/2022 de Paraguay (múltiplos de 50 Gs. a favor del consumidor).",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Standard SA",
+            "email": "dev@standard.com.py",
+            "homepage": "https://standard.com.py"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "magento/framework": ">=103.0",
+        "magento/module-quote": ">=101.2",
+        "magento/module-sales": ">=103.0",
+        "magento/module-checkout": ">=100.4"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Standard\\SedecoRedondeo\\": ""
+        }
+    }
+}

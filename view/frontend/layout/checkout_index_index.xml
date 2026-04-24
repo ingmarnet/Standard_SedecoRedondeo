@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Standard_SedecoRedondeo
+ * Layout: Checkout (One Page Checkout)
+ * Inyecta el componente Knockout.js del redondeo SEDECO en el resumen del checkout.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.root">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="sidebar" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="summary" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="totals" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <!--
+                                                            Línea de Redondeo SEDECO.
+                                                            Se posiciona ANTES del grand_total (sortOrder=150 coincide con sales.xml).
+                                                        -->
+                                                        <item name="sedeco-redondeo" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Standard_SedecoRedondeo/js/view/checkout/summary/sedeco-rounding</item>
+                                                            <item name="sortOrder" xsi:type="string">150</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="template" xsi:type="string">Standard_SedecoRedondeo/checkout/summary/sedeco-rounding</item>
+                                                                <item name="title" xsi:type="string">Redondeo Resolución SEDECO 1670/22</item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>
