@@ -62,8 +62,10 @@ class SedecoRounding extends AbstractTotal
             return $this;
         }
 
-        // Grand Total actual (después de impuestos y descuentos)
-        $grandTotal = $total->getGrandTotal();
+        // Grand Total actual (después de impuestos y descuentos).
+        // getGrandTotal() puede devolver null en un carrito recién creado;
+        // el cast a float convierte null → 0.0 de forma segura.
+        $grandTotal = (float) ($total->getGrandTotal() ?? 0);
 
         // Calcular el ajuste de redondeo
         $roundingAmount = $this->calculateRoundingAmount($grandTotal);
@@ -79,7 +81,7 @@ class SedecoRounding extends AbstractTotal
         $total->addTotalAmount($this->getCode(), $roundingAmount);
         $total->addBaseTotalAmount($this->getCode(), $roundingAmount);
         $total->setGrandTotal($grandTotal + $roundingAmount);
-        $total->setBaseGrandTotal($total->getBaseGrandTotal() + $roundingAmount);
+        $total->setBaseGrandTotal((float) ($total->getBaseGrandTotal() ?? 0) + $roundingAmount);
 
         // Persistir en Quote Address y Quote
         $address->setSedecoRoundAmount($roundingAmount);
