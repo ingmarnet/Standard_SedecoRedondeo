@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Standard_SedecoRedondeo
+ * Declara los observers del módulo.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <!--
+        checkout_submit_all_after: se dispara después de que la quote y la order
+        ya están completamente creadas y persistidas. Es el punto más confiable
+        para copiar sedeco_round_amount del Quote a la Order.
+    -->
+    <event name="checkout_submit_all_after">
+        <observer name="sedeco_redondeo_save_amount_to_order"
+                  instance="Standard\SedecoRedondeo\Observer\SaveSedecoAmountToOrder"/>
+    </event>
+
+    <!--
+        sales_model_service_quote_submit_success: fallback para métodos de pago externos
+        (PayPal, iFrames, etc.) que pueden no disparar checkout_submit_all_after.
+    -->
+    <event name="sales_model_service_quote_submit_success">
+        <observer name="sedeco_redondeo_save_amount_to_order_fallback"
+                  instance="Standard\SedecoRedondeo\Observer\SaveSedecoAmountToOrder"/>
+    </event>
+
+</config>

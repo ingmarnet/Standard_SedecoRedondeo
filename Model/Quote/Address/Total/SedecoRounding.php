@@ -67,7 +67,7 @@ class SedecoRounding extends AbstractTotal
 
         // Carrito vacío o sin procesar → resetear y salir
         if ($grandTotal <= 0) {
-            $quote->setSedecoRoundAmount(0.0);
+            $quote->setData('sedeco_round_amount', 0.0);
             return $this;
         }
 
@@ -76,11 +76,8 @@ class SedecoRounding extends AbstractTotal
 
         // Persistir en el Quote para que:
         //  · fetch() pueda leerlo vía REST API (/rest/V1/.../totals)
-        //  · Los Blocks de admin lo lean al renderizar la orden/invoice
-        $quote->setSedecoRoundAmount($roundingAmount);
-        
-        // También lo guardamos en el QuoteAddress para que el plugin ToOrder lo transfiera nativamente
-        $shippingAssignment->getShipping()->getAddress()->setData('sedeco_round_amount', $roundingAmount);
+        //  · El Observer checkout_submit_all_after lo copie a la Order
+        $quote->setData('sedeco_round_amount', $roundingAmount);
 
         if ($roundingAmount === 0.0) {
             $total->addTotalAmount($this->getCode(), 0.0);
@@ -111,7 +108,7 @@ class SedecoRounding extends AbstractTotal
      */
     public function fetch(Quote $quote, Total $total): array
     {
-        $roundingAmount = $total->getTotalAmount($this->getCode()) ?: $quote->getSedecoRoundAmount();
+        $roundingAmount = $total->getTotalAmount($this->getCode()) ?: $quote->getData('sedeco_round_amount');
         $roundingAmount = (float) ($roundingAmount ?? 0);
 
         if ($roundingAmount == 0) {

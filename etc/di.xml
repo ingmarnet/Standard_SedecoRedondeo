@@ -8,29 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <!-- ==================== PLUGINS ==================== -->
-
-    <!-- Propaga sedeco_round_amount de Quote → Order al convertir -->
-    <type name="Magento\Quote\Model\Quote\Address\ToOrder">
-        <plugin name="sedeco_redondeo_quote_to_order"
-                type="Standard\SedecoRedondeo\Plugin\Quote\Model\Quote\Address\ToOrder"
-                sortOrder="10"/>
-    </type>
-
-    <!-- Propaga sedeco_round_amount de Quote → Order Address -->
-    <type name="Magento\Quote\Model\Quote\Address\ToOrderAddress">
-        <plugin name="sedeco_redondeo_quote_address_to_order_address"
-                type="Standard\SedecoRedondeo\Plugin\Quote\Model\Quote\Address\ToOrderAddress"
-                sortOrder="10"/>
-    </type>
-
-    <!-- Calcula sedeco_round_amount en Invoice desde Order -->
-    <type name="Magento\Sales\Model\Service\InvoiceService">
-        <plugin name="sedeco_redondeo_invoice_service"
-                type="Standard\SedecoRedondeo\Plugin\Sales\Model\Service\InvoiceService"
-                sortOrder="10"/>
-    </type>
-
     <!-- Total de Invoice para PDF y vista Backend -->
     <type name="Magento\Sales\Model\Order\Invoice">
         <plugin name="sedeco_redondeo_invoice_total"
