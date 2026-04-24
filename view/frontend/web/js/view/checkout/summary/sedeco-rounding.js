@@ -57,9 +57,12 @@ define([
             format.requiredPrecision = 0;
 
             if (!segment) {
-                return priceUtils.formatPrice(0, format);
+                var zeroFormat = priceUtils.formatPrice(0, format);
+                return zeroFormat.replace(/\.00|,00/g, '');
             }
-            return priceUtils.formatPrice(segment.value, format);
+            
+            var formattedPrice = priceUtils.formatPrice(segment.value, format);
+            return formattedPrice.replace(/\.00|,00/g, '');
         },
 
         /**

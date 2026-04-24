@@ -41,13 +41,17 @@ class SedecoRounding extends Template
             return $this;
         }
 
+        $formattedValue = $this->order->formatPrice($roundAmount);
+        $formattedValue = str_replace([',00', '.00'], '', $formattedValue);
+
         $parent->addTotal(
             new DataObject([
-                'code'       => 'sedeco_redondeo',
-                'strong'     => false,
-                'value'      => $roundAmount,
-                'base_value' => $roundAmount,
-                'label'      => __('Redondeo Resolución SEDECO 1670/22'),
+                'code'        => 'sedeco_redondeo',
+                'strong'      => false,
+                'value'       => $formattedValue,
+                'base_value'  => $formattedValue,
+                'label'       => __('Redondeo Resolución SEDECO 1670/22'),
+                'is_formated' => true,
             ]),
             'grand_total' // Se inserta antes del grand_total
         );

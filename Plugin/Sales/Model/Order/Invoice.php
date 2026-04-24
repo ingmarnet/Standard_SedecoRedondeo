@@ -28,9 +28,15 @@ class Invoice
         MagentoInvoice $subject,
         MagentoInvoice $result
     ): MagentoInvoice {
-        $roundAmount = (float) $result->getData('sedeco_round_amount');
+        $order = $result->getOrder();
+        if (!$order) {
+            return $result;
+        }
+
+        $roundAmount = (float) $order->getData('sedeco_round_amount');
 
         if ($roundAmount !== 0.0) {
+            $result->setData('sedeco_round_amount', $roundAmount);
             $currentGrandTotal = (float) $result->getGrandTotal();
             $result->setGrandTotal($currentGrandTotal + $roundAmount);
             $result->setBaseGrandTotal((float) $result->getBaseGrandTotal() + $roundAmount);

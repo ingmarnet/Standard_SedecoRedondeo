@@ -29,6 +29,7 @@ if ((float) $amount === 0.0) {
         $priceCurrency = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $formattedPrice = $priceCurrency->format($amount, false, 0);
+        $formattedPrice = str_replace([',00', '.00'], '', $formattedPrice);
         ?>
         <span class="price"><?= /* @noEscape */ $formattedPrice ?></span>
     </td>
