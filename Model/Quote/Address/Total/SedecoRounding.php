@@ -78,6 +78,9 @@ class SedecoRounding extends AbstractTotal
         //  · fetch() pueda leerlo vía REST API (/rest/V1/.../totals)
         //  · Los Blocks de admin lo lean al renderizar la orden/invoice
         $quote->setSedecoRoundAmount($roundingAmount);
+        
+        // También lo guardamos en el QuoteAddress para que el plugin ToOrder lo transfiera nativamente
+        $shippingAssignment->getShipping()->getAddress()->setData('sedeco_round_amount', $roundingAmount);
 
         if ($roundingAmount === 0.0) {
             $total->addTotalAmount($this->getCode(), 0.0);

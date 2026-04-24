@@ -29,6 +29,11 @@ class ToOrderAddress
     ): OrderAddressInterface {
         $roundAmount = $quoteAddress->getData('sedeco_round_amount');
 
+        // El collector guarda el monto en el Quote, por lo que hacemos fallback a leerlo desde allí.
+        if ($roundAmount === null && $quoteAddress->getQuote()) {
+            $roundAmount = $quoteAddress->getQuote()->getData('sedeco_round_amount');
+        }
+
         if ($roundAmount !== null) {
             $result->setData('sedeco_round_amount', (float) $roundAmount);
         }
