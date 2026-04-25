@@ -29,7 +29,15 @@ class SedecoRounding extends Template
     public function initTotals(): static
     {
         $parent = $this->getParentBlock();
-        $this->invoice = $parent->getInvoice();
+
+        // Magento\Sales\Block\Adminhtml\Order\Invoice\Totals puede exponer
+        // la invoice via getInvoice() o via getSource() según la versión.
+        $this->invoice = $parent->getInvoice()
+            ?? ($parent->hasMethod('getSource') ? $parent->getSource() : null);
+
+        if (!$this->invoice) {
+            return $this;
+        }
 
         $roundAmount = (float) $this->invoice->getData('sedeco_round_amount');
 
