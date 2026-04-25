@@ -1,7 +1,8 @@
 <?php
 /**
  * Standard_SedecoRedondeo
- * Plugin: Agrega el total de redondeo SEDECO al bloque de totales de la Orden en Admin.
+ * Plugin: Inyecta la línea SEDECO en los totales de la Orden (Admin).
+ * Usa afterGetTotals() para garantizar que $_totals ya fue inicializado.
  */
 declare(strict_types=1);
 
@@ -12,29 +13,47 @@ use Magento\Sales\Block\Adminhtml\Order\Totals as OrderTotals;
 
 class AddSedecoTotal
 {
-    public function beforeToHtml(OrderTotals $subject): array
+    public function afterGetTotals(OrderTotals $subject, $result): array
     {
+        $result = (array) $result;
+
+        // Evitar duplicados
+        if (isset($result['sedeco_redondeo'])) {
+            return $result;
+        }
+
         $order = $subject->getOrder();
         if (!$order) {
-            return [];
+            return $result;
         }
 
         $roundAmount = (float) $order->getData('sedeco_round_amount');
         if ($roundAmount === 0.0) {
-            return [];
+            return $result;
         }
 
-        $subject->addTotal(
-            new DataObject([
-                'code'       => 'sedeco_redondeo',
-                'strong'     => false,
-                'value'      => $roundAmount,
-                'base_value' => $roundAmount,
-                'label'      => __('Redondeo Resolución SEDECO 1670/22'),
-            ]),
-            'shipping'
-        );
+        $sedecoTotal = new DataObject([
+            'code'       => 'sedeco_redondeo',
+            'strong'     => false,
+            'value'      => $roundAmount,
+            'base_value' => $roundAmount,
+            'label'      => __('Redondeo Resolución SEDECO 1670/22'),
+        ]);
 
-        return [];
+        // Insertar antes de grand_total
+        $newResult = [];
+        $inserted = false;
+        foreach ($result as $code => $total) {
+            if ($code === 'grand_total' && !$inserted) {
+                $newResult['sedeco_redondeo'] = $sedecoTotal;
+                $inserted = true;
+            }
+            $newResult[$code] = $total;
+        }
+        if (!$inserted) {
+            $newResult['sedeco_redondeo'] = $sedecoTotal;
+        }
+
+        return $newResult;
     }
 }
