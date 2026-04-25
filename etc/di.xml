@@ -8,6 +8,20 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <!-- Plugin directo en el bloque de totales del Admin para Orden -->
+    <type name="Magento\Sales\Block\Adminhtml\Order\Totals">
+        <plugin name="sedeco_redondeo_order_totals_block"
+                type="Standard\SedecoRedondeo\Plugin\Block\Adminhtml\Order\AddSedecoTotal"
+                sortOrder="10"/>
+    </type>
+
+    <!-- Plugin directo en el bloque de totales del Admin para Invoice -->
+    <type name="Magento\Sales\Block\Adminhtml\Order\Invoice\Totals">
+        <plugin name="sedeco_redondeo_invoice_totals_block"
+                type="Standard\SedecoRedondeo\Plugin\Block\Adminhtml\Invoice\AddSedecoTotal"
+                sortOrder="10"/>
+    </type>
+
     <!-- Total de Invoice para PDF y vista Backend -->
     <type name="Magento\Sales\Model\Order\Invoice">
         <plugin name="sedeco_redondeo_invoice_total"
